@@ -1,0 +1,26 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: gateway-server
+  cloud:
+    gateway:
+      routes:
+        # Usuarios - Solo un microservicio para users (lectura y escritura)
+        - id: micro-users
+          uri: lb://users
+          predicates:
+            - Path=/api/users/**  # Esto cubre tanto las rutas de lectura como escritura
+
+        # Pizzas - Lectura (microservicio dedicado a leer pizzas)
+        - id: micro-pizzas-read
+          uri: lb://pizzas-read  # Servicio para leer pizzas
+          predicates:
+            - Path=/pizzas/read/**  # Ruta para leer pizzas
+
+        # Pizzas - Escritura (microservicio dedicado a escribir pizzas)
+        - id: micro-pizzas-write
+          uri: lb://pizzas-write  # Servicio para escribir pizzas
+          predicates:
+            - Path=/pizzas/write/**
