@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
@@ -16,17 +17,17 @@ public class ConfigData {
         return args -> {
             User usuario1 =User.builder()
                     .name("Mauro")
-                    .pizzafav("Fugazzeta")
+                    .favoritePizzas(new ArrayList<>(List.of(1L, 2L)))
                     .build();
 
             User usuario2 =User.builder()
                     .name("Emilio")
-                    .pizzafav("Muzzarela")
+                    .favoritePizzas(new ArrayList<>(List.of(2L)))
                     .build();
 
             User usuario3 =User.builder()
                     .name("Tomas")
-                    .pizzafav("Napolitana")
+                    .favoritePizzas(new ArrayList<>(List.of(1L)))
                     .build();
 
             repositorioUsuario.saveAll(List.of(usuario1, usuario2,usuario3));

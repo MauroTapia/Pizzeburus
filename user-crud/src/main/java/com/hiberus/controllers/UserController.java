@@ -58,4 +58,17 @@ public class UserController {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
     }
+
+    @PostMapping("/{userId}/favorites/{pizzaId}")
+    public ResponseEntity<String> addFavoritePizza(@PathVariable Long userId, @PathVariable Long pizzaId) {
+        userServices.addFavoritePizza(userId, pizzaId);
+        return ResponseEntity.ok("Pizza marcada como favorita");
+    }
+
+    @DeleteMapping("/{userId}/favorites/{pizzaId}")
+    public ResponseEntity<String> removeFavoritePizza(@PathVariable Long userId, @PathVariable Long pizzaId) {
+        userServices.removeFavoritePizza(userId, pizzaId);
+        return ResponseEntity.ok("Pizza desmarcada como favorita");
+    }
+
 }

@@ -4,8 +4,6 @@ server:
 eureka:
   instance:
     hostname: localhost
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-    prefer-ip-address: true
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
@@ -13,27 +11,18 @@ eureka:
 spring:
   application:
     name: write-pizzas
+  h2:
+    console:
+      enabled: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/pizzas_db
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:pizzas_db
     username: user
-    password: password
-    driver-class-name: org.postgresql.Driver
+    password: admin
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-  jackson:
-    serialization:
-      indent_output: true
-  sleuth:
-    sampler:
-      probability: 1.0
-  zipkin:
-    base-url: http://zipkin:9411
 
-mvc:
-  pathmatch:
-    matching-strategy: ant_path_matcher
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher

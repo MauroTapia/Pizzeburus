@@ -1,10 +1,12 @@
 com\hiberus\exceptions\UserNotFoundException.class
+com\hiberus\services\UserServices.class
+com\hiberus\models\Pizza.class
 com\hiberus\config\ConfigData.class
 com\hiberus\ApplicationUsers.class
-com\hiberus\services\UserServices.class
 com\hiberus\services\Impl\UserServiceImpl.class
 com\hiberus\repositories\UserRepository.class
 com\hiberus\controllers\UserController.class
 com\hiberus\models\User$UserBuilder.class
 com\hiberus\config\ConfigSwagger.class
+com\hiberus\feignConfig\FeignPizzasRead.class
 com\hiberus\models\User.class

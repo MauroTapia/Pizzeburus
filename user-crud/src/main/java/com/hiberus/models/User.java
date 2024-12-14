@@ -2,6 +2,8 @@ package com.hiberus.models;
 
 import lombok.*;
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @NoArgsConstructor
@@ -18,9 +20,8 @@ public class User{
     @Setter
     @Column(name = "name")
     private String name;
-    @Setter
-    @Column(name = "pizzasFav")
-    private String pizzafav;
+    @ElementCollection
+    private List<Long> favoritePizzas = new ArrayList<>();
 
 
 }
