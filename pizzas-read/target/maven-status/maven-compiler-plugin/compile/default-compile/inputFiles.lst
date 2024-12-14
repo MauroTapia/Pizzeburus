@@ -1,8 +1,7 @@
-C:\Users\MauroSebastianTapia\Desktop\projects-hiberus\introSpringCloud-SleuthZipkin-master\CursoIntroduccionSpringCloud\pizzas-read\src\main\java\com\hiberus\config\ConfigSwagger.java
-C:\Users\MauroSebastianTapia\Desktop\projects-hiberus\introSpringCloud-SleuthZipkin-master\CursoIntroduccionSpringCloud\pizzas-read\src\main\java\com\hiberus\models\Pizza.java
-C:\Users\MauroSebastianTapia\Desktop\projects-hiberus\introSpringCloud-SleuthZipkin-master\CursoIntroduccionSpringCloud\pizzas-read\src\main\java\com\hiberus\controllers\PizzaController.java
-C:\Users\MauroSebastianTapia\Desktop\projects-hiberus\introSpringCloud-SleuthZipkin-master\CursoIntroduccionSpringCloud\pizzas-read\src\main\java\com\hiberus\config\ConfigData.java
-C:\Users\MauroSebastianTapia\Desktop\projects-hiberus\introSpringCloud-SleuthZipkin-master\CursoIntroduccionSpringCloud\pizzas-read\src\main\java\com\hiberus\services\PizzaService.java
-C:\Users\MauroSebastianTapia\Desktop\projects-hiberus\introSpringCloud-SleuthZipkin-master\CursoIntroduccionSpringCloud\pizzas-read\src\main\java\com\hiberus\ApplicationPizzas.java
-C:\Users\MauroSebastianTapia\Desktop\projects-hiberus\introSpringCloud-SleuthZipkin-master\CursoIntroduccionSpringCloud\pizzas-read\src\main\java\com\hiberus\repositories\PizzaRepository.java
-C:\Users\MauroSebastianTapia\Desktop\projects-hiberus\introSpringCloud-SleuthZipkin-master\CursoIntroduccionSpringCloud\pizzas-read\src\main\java\com\hiberus\services\Impl\PizzaServiceImpl.java
+C:\Users\MauroSebastianTapia\Desktop\projects-hiberus\pizzeburus\pizzas-read\src\main\java\com\hiberus\controllers\PizzaController.java
+C:\Users\MauroSebastianTapia\Desktop\projects-hiberus\pizzeburus\pizzas-read\src\main\java\com\hiberus\config\ConfigSwagger.java
+C:\Users\MauroSebastianTapia\Desktop\projects-hiberus\pizzeburus\pizzas-read\src\main\java\com\hiberus\ApplicationPizzasRead.java
+C:\Users\MauroSebastianTapia\Desktop\projects-hiberus\pizzeburus\pizzas-read\src\main\java\com\hiberus\services\Impl\PizzaServiceImpl.java
+C:\Users\MauroSebastianTapia\Desktop\projects-hiberus\pizzeburus\pizzas-read\src\main\java\com\hiberus\services\PizzaService.java
+C:\Users\MauroSebastianTapia\Desktop\projects-hiberus\pizzeburus\pizzas-read\src\main\java\com\hiberus\repositories\PizzaRepository.java
+C:\Users\MauroSebastianTapia\Desktop\projects-hiberus\pizzeburus\pizzas-read\src\main\java\com\hiberus\models\Pizza.java
