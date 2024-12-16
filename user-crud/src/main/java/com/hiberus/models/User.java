@@ -22,6 +22,4 @@ public class User{
     private String name;
     @ElementCollection
     private List<Long> favoritePizzas = new ArrayList<>();
-
-
 }

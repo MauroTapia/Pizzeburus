@@ -5,6 +5,7 @@ import com.hiberus.exceptions.UserNotFoundException;
 import com.hiberus.feignConfig.FeignPizzasRead;
 import com.hiberus.models.Pizza;
 import com.hiberus.models.User;
+import com.hiberus.models.dto.CreateUserDto;
 import com.hiberus.repositories.UserRepository;
 import com.hiberus.services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,18 +35,18 @@ import java.util.List;
         }
 
         @Override
-        public User createUser(User user) {
+        public User createUser(CreateUserDto createUserDto) {
+            User user = new User();
+            user.setName(createUserDto.getName());
             return userRepository.save(user);
         }
 
         @Override
-        public User updateUser(Long id, User userDetails) {
+        public User updateUser(Long id, CreateUserDto updateUserDto) {
             User existingUser = userRepository.findById(id)
                     .orElseThrow(() -> new UserNotFoundException(id));
 
-            existingUser.setName(userDetails.getName());
-            existingUser.setFavoritePizzas(userDetails.getFavoritePizzas());
-
+            existingUser.setName(updateUserDto.getName());
             return userRepository.save(existingUser);
         }
 
@@ -63,6 +64,10 @@ import java.util.List;
 
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+
+            if (user.getFavoritePizzas().contains(pizzaId)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La pizza ya está en favoritos");
+            }
 
             user.getFavoritePizzas().add(pizzaId);
             userRepository.save(user);

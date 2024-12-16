@@ -29,9 +29,9 @@ public class PizzaController {
         Pizza pizza = pizzaService.getPizzaById(id);
         if (pizza != null) {
             pizzaService.deletePizza(id);
-            return new ResponseEntity<>("Notebook deleted", HttpStatus.OK);
+            return new ResponseEntity<>("Pizza deleted", HttpStatus.OK);
         }else {
-            return new ResponseEntity<>("Notebook not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Pizza not found", HttpStatus.NOT_FOUND);
         }
     }
 

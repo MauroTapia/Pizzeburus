@@ -2,6 +2,7 @@ package com.hiberus.controllers;
 
 
 import com.hiberus.models.User;
+import com.hiberus.models.dto.CreateUserDto;
 import com.hiberus.services.UserServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,14 +38,14 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User createdUser = userServices.createUser(user);
+    public ResponseEntity<User> createUser(@RequestBody CreateUserDto createUserDto) {
+        User createdUser = userServices.createUser(createUserDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        User updatedUser = userServices.updateUser(id, user);
+    @PatchMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody CreateUserDto updateUserDto) {
+        User updatedUser = userServices.updateUser(id, updateUserDto);
         return ResponseEntity.ok(updatedUser);
     }
 

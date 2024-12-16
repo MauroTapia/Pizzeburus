@@ -16,9 +16,9 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="pizzas-read (1)" target="11" />
-      <module name="pizzas-read (2)" target="11" />
-      <module name="usuarios" target="11" />
+      <module name="pizzas-read" target="11" />
+      <module name="pizzas-write" target="11" />
+      <module name="user-crud" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -27,11 +27,8 @@
       <module name="eureka-server" options="-parameters" />
       <module name="gateway-server" options="-parameters" />
       <module name="pizzas-read" options="-parameters" />
-      <module name="pizzas-read (1)" options="-parameters" />
-      <module name="pizzas-read (2)" options="-parameters" />
       <module name="pizzas-write" options="-parameters" />
       <module name="user-crud" options="-parameters" />
-      <module name="usuarios" options="-parameters" />
     </option>
   </component>
 </project>

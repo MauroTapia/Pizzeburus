@@ -10,20 +10,32 @@ import java.util.List;
 
 @Configuration
 public class ConfigData {
+
+
     @Bean("ConfigData")
     CommandLineRunner commandLineRunner(PizzaWriteRepository pizzaRepository) {
         return args -> {
-            Pizza pizza1 = Pizza.builder()
-                    .name("FuggazetaWrite")
-                    .build();
-            Pizza pizza2 = Pizza.builder()
-                    .name("MuzzarelaWrite")
-                    .build();
-            Pizza pizza3 = Pizza.builder()
-                    .name("JamonWrite")
-                    .build();
+            // Comprobar si las pizzas ya existen en la base de datos
+            if (!pizzaRepository.existsByName("FuggazetaWrite")) {
+                Pizza pizza1 = Pizza.builder()
+                        .name("FuggazetaWrite")
+                        .build();
+                pizzaRepository.save(pizza1);
+            }
 
-            pizzaRepository.saveAll(List.of(pizza1,pizza2,pizza3));
+            if (!pizzaRepository.existsByName("MuzzarelaWrite")) {
+                Pizza pizza2 = Pizza.builder()
+                        .name("MuzzarelaWrite")
+                        .build();
+                pizzaRepository.save(pizza2);
+            }
+
+            if (!pizzaRepository.existsByName("JamonWrite")) {
+                Pizza pizza3 = Pizza.builder()
+                        .name("JamonWrite")
+                        .build();
+                pizzaRepository.save(pizza3);
+            }
         };
     }
 }

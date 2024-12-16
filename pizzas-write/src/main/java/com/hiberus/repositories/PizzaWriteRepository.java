@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface PizzaWriteRepository extends JpaRepository<Pizza,Long> {
     Optional<Pizza> findById(Long id);
+    boolean existsByName(String name);
 }
