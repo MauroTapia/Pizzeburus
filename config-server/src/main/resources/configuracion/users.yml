@@ -12,6 +12,18 @@ spring:
   config:
     activate:
       on-profile: default
+
+  application:
+    name: users
+
+  zipkin:
+    sender:
+      type: rabbit
+
+  sleuth:
+    sampler:
+      probability: 1.0
+
   h2:
     console:
       enabled: true
@@ -26,19 +38,32 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-#
-#resilience4j:
-#  circuitbreaker:
-#    configs:
-#      shared:
-#        sliding-window-type: count_based #Basado en contador
-#        sliding-window-size: 5 #Número de llamadas fallidas permitidas
-#        slow-call-rate-threshold: 50 #Porcentaje que vamos a permitir de llamadas fallidas o lentas
-#        permitted-number-of-calls-in-half-open-state: 1 #Número de llamadas permitidas en el estado medio abierto
-#        max-wait-duration-in-half-open-state: 10s #Tiempo de duración máximo del estado medio abierto
-#        wait-duration-in-open-state: 10s #Tiempo duración estado abierto
-#        writable-stack-trace-enabled: true #Logs por consola
-#        automatic-transition-from-open-to-half-open-enabled: true
-#    instances:
-#      prendas:
-#        base-config: shared
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: prometheus, health  # Exponer /actuator/prometheus
+    metrics:
+      export:
+        prometheus:
+          enabled: true
+    endpoint:
+      prometheus:
+        enabled: true
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      shared:
+        sliding-window-type: count_based #Basado en contador
+        sliding-window-size: 5 #Número de llamadas fallidas permitidas
+        slow-call-rate-threshold: 50 #Porcentaje que vamos a permitir de llamadas fallidas o lentas
+        permitted-number-of-calls-in-half-open-state: 1 #Número de llamadas permitidas en el estado medio abierto
+        max-wait-duration-in-half-open-state: 10s #Tiempo de duración máximo del estado medio abierto
+        wait-duration-in-open-state: 10s #Tiempo duración estado abierto
+        writable-stack-trace-enabled: true #Logs por consola
+        automatic-transition-from-open-to-half-open-enabled: true
+    instances:
+      prendas:
+        base-config: shared

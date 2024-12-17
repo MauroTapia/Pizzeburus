@@ -12,7 +12,6 @@ public interface UserServices {
     User updateUser(Long id, CreateUserDto updateUserDto);
     void deleteUser(Long id);
     void addFavoritePizza(Long userId, Long pizzaId);
-
     void removeFavoritePizza(Long userId, Long pizzaId);
 
 }

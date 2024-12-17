@@ -9,8 +9,20 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
 
 spring:
+  config:
+    activate:
+      on-profile: default
+
   application:
     name: pizzas-read
+
+  zipkin:
+    sender:
+      type: rabbit
+
+  sleuth:
+    sampler:
+      probability: 1.0
   datasource:
     url: jdbc:postgresql://localhost:5432/pizzas_db
     username: user
