@@ -35,7 +35,20 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-
+  management:
+    endpoint:
+      metrics:
+        enabled: true
+      prometheus:
+        enabled: true
+    endpoints:
+      web:
+        exposure:
+          include: '*'
+    metrics:
+      export:
+        prometheus:
+          enabled: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher

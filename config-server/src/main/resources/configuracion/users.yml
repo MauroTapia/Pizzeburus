@@ -40,17 +40,19 @@ spring:
       matching-strategy: ant_path_matcher
 
   management:
+    endpoint:
+      metrics:
+        enabled: true
+      prometheus:
+        enabled: true
     endpoints:
       web:
         exposure:
-          include: prometheus, health  # Exponer /actuator/prometheus
+          include: '*'
     metrics:
       export:
         prometheus:
           enabled: true
-    endpoint:
-      prometheus:
-        enabled: true
 
 resilience4j:
   circuitbreaker:
