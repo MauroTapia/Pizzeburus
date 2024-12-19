@@ -19,7 +19,6 @@ public class PizzaServiceImpl implements PizzaService {
     @Autowired
     PizzaRepository pizzaRepository;
 
-
     @Override
     public List<Pizza> getAllPizzas() {
         logger.info("Obteniendo todas las pizzas");  // Log de información

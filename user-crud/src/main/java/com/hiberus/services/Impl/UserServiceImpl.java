@@ -8,6 +8,7 @@ import com.hiberus.models.User;
 import com.hiberus.models.dto.CreateUserDto;
 import com.hiberus.repositories.UserRepository;
 import com.hiberus.services.UserServices;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -56,6 +57,7 @@ import java.util.List;
         }
 
         @Override
+        @CircuitBreaker(name = "pizzasReadService", fallbackMethod = "fallbackAddFavoritePizza")
         public void addFavoritePizza(Long userId, Long pizzaId) {
             Pizza pizza = feignPizzasRead.getPizzaById(pizzaId);
             if (pizza == null) {
@@ -73,7 +75,13 @@ import java.util.List;
             userRepository.save(user);
         }
 
+        public void fallbackAddFavoritePizza(Long userId, Long pizzaId, Throwable throwable) {
+            // Acción en caso de que el circuito se active
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "El servicio de pizzas no está disponible, intente más tarde.");
+        }
+
         @Override
+        @CircuitBreaker(name = "pizzasReadService", fallbackMethod = "fallbackRemoveFavoritePizza")
         public void removeFavoritePizza(Long userId, Long pizzaId) {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
@@ -83,5 +91,9 @@ import java.util.List;
             }
 
             userRepository.save(user);
+        }
+
+        public void fallbackRemoveFavoritePizza(Long userId, Long pizzaId, Throwable throwable) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "El servicio de favoritos no está disponible, intente más tarde.");
         }
     }

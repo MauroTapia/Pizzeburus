@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">user-crud</a> &gt; <a href="index.source.html" class="el_package">com.hiberus.services.Impl</a> &gt; <span class="el_source">UserServiceImpl.java</span></div><h1>UserServiceImpl.java</h1><pre class="source lang-java linenums">package com.hiberus.services.Impl;
+
+
+import com.hiberus.exceptions.UserNotFoundException;
+import com.hiberus.feignConfig.FeignPizzasRead;
+import com.hiberus.models.Pizza;
+import com.hiberus.models.User;
+import com.hiberus.models.dto.CreateUserDto;
+import com.hiberus.repositories.UserRepository;
+import com.hiberus.services.UserServices;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+
+    @Service
+<span class="fc" id="L19">    public class UserServiceImpl implements UserServices {</span>
+
+         @Autowired
+         FeignPizzasRead feignPizzasRead;
+         @Autowired
+         UserRepository userRepository;
+
+        @Override
+        public List&lt;User&gt; getUsers() {
+<span class="fc" id="L28">            return userRepository.findAll();</span>
+        }
+
+        @Override
+        public User getUserById(Long id) {
+<span class="fc" id="L33">            return userRepository.findById(id)</span>
+<span class="pc" id="L34">                    .orElseThrow(() -&gt; new RuntimeException(&quot;User not found&quot;));</span>
+        }
+
+        @Override
+        public User createUser(CreateUserDto createUserDto) {
+<span class="fc" id="L39">            User user = new User();</span>
+<span class="fc" id="L40">            user.setName(createUserDto.getName());</span>
+<span class="fc" id="L41">            return userRepository.save(user);</span>
+        }
+
+        @Override
+        public User updateUser(Long id, CreateUserDto updateUserDto) {
+<span class="nc" id="L46">            User existingUser = userRepository.findById(id)</span>
+<span class="nc" id="L47">                    .orElseThrow(() -&gt; new UserNotFoundException(id));</span>
+
+<span class="nc" id="L49">            existingUser.setName(updateUserDto.getName());</span>
+<span class="nc" id="L50">            return userRepository.save(existingUser);</span>
+        }
+
+        @Override
+        public void deleteUser(Long id) {
+<span class="fc" id="L55">            userRepository.deleteById(id);</span>
+<span class="fc" id="L56">        }</span>
+
+        @Override
+        public void addFavoritePizza(Long userId, Long pizzaId) {
+<span class="fc" id="L60">            Pizza pizza = feignPizzasRead.getPizzaById(pizzaId);</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">            if (pizza == null) {</span>
+<span class="nc" id="L62">                throw new ResponseStatusException(HttpStatus.NOT_FOUND, &quot;Pizza no encontrada&quot;);</span>
+            }
+
+<span class="fc" id="L65">            User user = userRepository.findById(userId)</span>
+<span class="pc" id="L66">                    .orElseThrow(() -&gt; new ResponseStatusException(HttpStatus.NOT_FOUND, &quot;Usuario no encontrado&quot;));</span>
+
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">            if (user.getFavoritePizzas().contains(pizzaId)) {</span>
+<span class="nc" id="L69">                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, &quot;La pizza ya está en favoritos&quot;);</span>
+            }
+
+<span class="fc" id="L72">            user.getFavoritePizzas().add(pizzaId);</span>
+<span class="fc" id="L73">            userRepository.save(user);</span>
+<span class="fc" id="L74">        }</span>
+
+        @Override
+        public void removeFavoritePizza(Long userId, Long pizzaId) {
+<span class="fc" id="L78">            User user = userRepository.findById(userId)</span>
+<span class="pc" id="L79">                    .orElseThrow(() -&gt; new ResponseStatusException(HttpStatus.NOT_FOUND, &quot;Usuario no encontrado&quot;));</span>
+
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">            if (!user.getFavoritePizzas().remove(pizzaId)) {</span>
+<span class="nc" id="L82">                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, &quot;La pizza no estaba en favoritos&quot;);</span>
+            }
+
+<span class="fc" id="L85">            userRepository.save(user);</span>
+<span class="fc" id="L86">        }</span>
+    }
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

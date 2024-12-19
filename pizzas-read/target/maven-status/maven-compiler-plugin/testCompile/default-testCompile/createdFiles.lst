@@ -1,1 +1,2 @@
-com\hiberus\service\PizzaReadTest.class
+com\hiberus\services\PizzaReadTestUnitarios.class
+com\hiberus\services\PizzaWriteServiceIntegrationTest.class

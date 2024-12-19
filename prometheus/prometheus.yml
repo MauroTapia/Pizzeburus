@@ -12,7 +12,7 @@ scrape_configs:
     static_configs:
       - targets: ["localhost:8081"]
 
-  - job_name: 'users'
+  - job_name: "users"
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: ["localhost:8083"]
