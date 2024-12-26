@@ -1,6 +1,7 @@
 package com.hiberus.controllers;
 
 import com.hiberus.models.Pizza;
+import com.hiberus.models.dto.PizzaDTO;
 import com.hiberus.services.PizzaWriteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -29,8 +30,8 @@ public class PizzaController {
             @ApiResponse(responseCode = "400", description = "Bad request, invalid data")
     })
     @PostMapping
-    public ResponseEntity<Pizza> createPizza(@RequestBody Pizza pizza){
-        Pizza pizzaCreated = pizzaService.createPizza(pizza);
+    public ResponseEntity<Pizza> createPizza(@RequestBody PizzaDTO pizzaDTO){
+        Pizza pizzaCreated = pizzaService.createPizza(pizzaDTO);
         return new ResponseEntity<>(pizzaCreated, HttpStatus.OK);
     }
 
@@ -62,9 +63,9 @@ public class PizzaController {
             @ApiResponse(responseCode = "404", description = "Pizza not found with the given ID")
     })
     @PatchMapping("{id}")
-    public ResponseEntity<Pizza> updateNotebook(@PathVariable("id") Long id, @RequestBody Pizza pizza) {
-        pizza.setId(id);
-        Pizza updatePizza = pizzaService.updatePizza(pizza);
-        return new ResponseEntity<>(updatePizza, HttpStatus.OK);
+    public ResponseEntity<Pizza> updatePizza(@PathVariable("id") Long id, @RequestBody PizzaDTO pizzaDTO) {
+        // Aquí el id viene de la URL y el name del cuerpo de la solicitud
+        Pizza updatedPizza = pizzaService.updatePizza(id, pizzaDTO);
+        return new ResponseEntity<>(updatedPizza, HttpStatus.OK);
     }
 }

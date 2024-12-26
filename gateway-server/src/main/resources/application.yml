@@ -30,7 +30,7 @@ eureka:
     healthCheckUrlPath: http://localhost:9000/actuator/info
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/
 
 
 server:

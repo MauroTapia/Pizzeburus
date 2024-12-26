@@ -6,3 +6,5 @@ com\hiberus\models\Pizza.class
 com\hiberus\models\Pizza$PizzaBuilder.class
 com\hiberus\services\Impl\PizzaWriteServiceImpl.class
 com\hiberus\repositories\PizzaWriteRepository.class
+com\hiberus\config\ConfigSwagger.class
+com\hiberus\models\dto\PizzaDTO.class

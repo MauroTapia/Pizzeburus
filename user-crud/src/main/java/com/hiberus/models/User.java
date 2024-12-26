@@ -20,6 +20,6 @@ public class User{
     @Setter
     @Column(name = "name")
     private String name;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<Long> favoritePizzas = new ArrayList<>();
 }

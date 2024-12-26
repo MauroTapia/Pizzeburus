@@ -7,9 +7,12 @@ import com.hiberus.services.UserServices;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -17,6 +20,7 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
 
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private final UserServices userServices;
 
     public UserController(UserServices userServices) {

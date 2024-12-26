@@ -1,6 +1,7 @@
 package com.hiberus.services.Impl;
 
 
+import com.hiberus.controllers.UserController;
 import com.hiberus.exceptions.UserNotFoundException;
 import com.hiberus.feignConfig.FeignPizzasRead;
 import com.hiberus.models.Pizza;
@@ -9,6 +10,8 @@ import com.hiberus.models.dto.CreateUserDto;
 import com.hiberus.repositories.UserRepository;
 import com.hiberus.services.UserServices;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,7 +22,9 @@ import java.util.List;
     @Service
     public class UserServiceImpl implements UserServices {
 
-         @Autowired
+        private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
+
+        @Autowired
          FeignPizzasRead feignPizzasRead;
          @Autowired
          UserRepository userRepository;
@@ -37,8 +42,14 @@ import java.util.List;
 
         @Override
         public User createUser(CreateUserDto createUserDto) {
-            User user = new User();
-            user.setName(createUserDto.getName());
+            if (createUserDto == null || createUserDto.getName() == null || createUserDto.getName().trim().isEmpty()) {
+                throw new IllegalArgumentException("User name cannot be null or empty");
+            }
+
+            User user = User.builder()
+                    .name(createUserDto.getName())
+                    .build();
+
             return userRepository.save(user);
         }
 
@@ -57,43 +68,49 @@ import java.util.List;
         }
 
         @Override
-        @CircuitBreaker(name = "pizzasReadService", fallbackMethod = "fallbackAddFavoritePizza")
         public void addFavoritePizza(Long userId, Long pizzaId) {
-            Pizza pizza = feignPizzasRead.getPizzaById(pizzaId);
-            if (pizza == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pizza no encontrada");
-            }
-
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
             if (user.getFavoritePizzas().contains(pizzaId)) {
+//                log.warn("La pizza {} ya está en los favoritos del usuario {}", pizzaId, userId);
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La pizza ya está en favoritos");
             }
 
-            user.getFavoritePizzas().add(pizzaId);
-            userRepository.save(user);
-        }
+            Pizza pizza = getPizzaByIdWithCircuitBreaker(pizzaId);
 
-        public void fallbackAddFavoritePizza(Long userId, Long pizzaId, Throwable throwable) {
-            // Acción en caso de que el circuito se active
-            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "El servicio de pizzas no está disponible, intente más tarde.");
+            user.getFavoritePizzas().add(pizzaId);
+
+            userRepository.save(user);
+//            log.info("Pizza {} agregada a los favoritos del usuario {}", pizzaId, userId);
         }
 
         @Override
-        @CircuitBreaker(name = "pizzasReadService", fallbackMethod = "fallbackRemoveFavoritePizza")
         public void removeFavoritePizza(Long userId, Long pizzaId) {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
-            if (!user.getFavoritePizzas().remove(pizzaId)) {
+            if (!user.getFavoritePizzas().contains(pizzaId)) {
+//                log.warn("La pizza {} no está en los favoritos del usuario {}", pizzaId, userId);
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La pizza no estaba en favoritos");
             }
 
+            Pizza pizza = getPizzaByIdWithCircuitBreaker(pizzaId);
+
+            user.getFavoritePizzas().remove(pizzaId);
+
             userRepository.save(user);
+//            log.info("Pizza {} eliminada de los favoritos del usuario {}", pizzaId, userId);
         }
 
-        public void fallbackRemoveFavoritePizza(Long userId, Long pizzaId, Throwable throwable) {
-            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "El servicio de favoritos no está disponible, intente más tarde.");
+        @CircuitBreaker(name = "pizzasReadService", fallbackMethod = "fallbackPizzaNotFound")
+        public Pizza getPizzaByIdWithCircuitBreaker(Long pizzaId) {
+            return feignPizzasRead.getPizzaById(pizzaId);
         }
+
+        public void fallbackPizzaNotFound(Long pizzaId, Throwable throwable) {
+//            log.error("Error al intentar obtener la pizza {}. Causado por: {}", pizzaId, throwable.getMessage());
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "El servicio de pizzas no está disponible, intente más tarde.");
+        }
+
     }

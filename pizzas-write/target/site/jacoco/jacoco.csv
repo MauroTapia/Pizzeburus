@@ -1,7 +1,0 @@
-GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-pizzas-write,com.hiberus.models,Pizza.PizzaBuilder,27,0,0,0,1,0,5,0,5,0
-pizzas-write,com.hiberus.models,Pizza,13,17,0,0,2,5,2,5,2,5
-pizzas-write,com.hiberus.services.Impl,PizzaWriteServiceImpl,0,44,0,0,0,10,0,5,0,5
-pizzas-write,com.hiberus,ApplicationPizzasWrite,8,0,0,0,3,0,2,0,2,0
-pizzas-write,com.hiberus.config,ConfigData,46,0,6,0,18,0,6,0,3,0
-pizzas-write,com.hiberus.controllers,PizzaController,51,0,2,0,11,0,5,0,4,0
