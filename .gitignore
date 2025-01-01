@@ -1,0 +1,66 @@
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de log
+*.log
+logs/
+
+# Archivos generados por el IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.code-workspace
+
+# Maven y Gradle
+target/
+build/
+.mvn/
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Configuración específica del usuario
+*.swp
+*.swo
+*~
+*.bak
+*.tmp
+*.old
+
+
+
+# Swagger generados
+swagger.json
+swagger.yaml
+
+# Archivos binarios y de despliegue
+*.class
+*.war
+*.jar
+*.ear
+
+# Archivos de monitoreo y métricas
+*.pid
+*.out
+*.metrics
+
+# Archivos temporales o de caché
+*.bak
+*.tmp
+*.old
+*.orig
+.tmp/
+cache/
+
+
+# Configuración de CI/CD
+node_modules/
+.npm/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Otros
+# Incluir cualquier otra carpeta o archivo generado que no desees en el repositorio.

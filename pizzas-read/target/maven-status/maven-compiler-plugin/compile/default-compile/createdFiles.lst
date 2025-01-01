@@ -1,8 +1,0 @@
-com\hiberus\services\Impl\PizzaServiceImpl.class
-com\hiberus\controllers\PizzaController.class
-com\hiberus\repositories\PizzaRepository.class
-com\hiberus\ApplicationPizzasRead.class
-com\hiberus\models\Pizza.class
-com\hiberus\models\Pizza$PizzaBuilder.class
-com\hiberus\config\ConfigSwagger.class
-com\hiberus\services\PizzaService.class
