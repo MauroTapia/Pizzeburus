@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 public class PizzaServiceIntegrationTest {
     @Autowired
-    private PizzaServiceImpl pizzaService;
+    private PizzaService pizzaService;
 
     @Autowired
     private PizzaRepository pizzaRepository;

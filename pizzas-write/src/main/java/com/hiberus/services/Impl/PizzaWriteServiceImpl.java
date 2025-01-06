@@ -39,14 +39,11 @@ public class PizzaWriteServiceImpl implements PizzaWriteService {
 
     @Override
     public Pizza updatePizza(Long id, PizzaDTO pizzaDTO) {
-        // Buscar la pizza existente por id
         Pizza pizzaToUpdate = pizzaWriteRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pizza not found with ID: " + id));
 
-        // Actualizar solo el nombre, el id no debe cambiar
         pizzaToUpdate.setName(pizzaDTO.getName());
 
-        // Guardar la pizza actualizada
         return pizzaWriteRepository.save(pizzaToUpdate);
     }
 

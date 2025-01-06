@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <!-- Appender para guardar los logs en un archivo -->
+        <File name="File" fileName="/app/logs/user-crud.log">
+            <PatternLayout>
+                <!-- El formato del log puede ajustarse a tus necesidades -->
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</Pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+
+    <Loggers>
+        <!-- Log principal con nivel INFO -->
+        <Root level="info">
+            <AppenderRef ref="File" />
+        </Root>
+    </Loggers>
+</Configuration>

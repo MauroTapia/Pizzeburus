@@ -1,0 +1,28 @@
+{
+  "order" : 0,
+  "index_patterns" : [
+    "logstash-*"
+  ],
+  "settings" : {
+    "index" : {
+      "number_of_shards" : "1"
+    }
+  },
+  "mappings" : {
+    "properties" : {
+      "module" : {
+        "type" : "keyword"
+      },
+      "log_level" : {
+        "type" : "keyword"
+      },
+      "pid" : {
+        "type" : "short"
+      },
+      "log_message" : {
+        "type" : "text"
+      }
+    }
+  },
+  "aliases" : { }
+}

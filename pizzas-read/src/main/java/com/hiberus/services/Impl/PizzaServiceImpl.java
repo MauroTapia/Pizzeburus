@@ -21,9 +21,9 @@ public class PizzaServiceImpl implements PizzaService {
 
     @Override
     public List<Pizza> getAllPizzas() {
-        logger.info("Obteniendo todas las pizzas");  // Log de información
+        logger.info("Obteniendo todas las pizzas");
         List<Pizza> pizzas = pizzaRepository.findAll();
-        logger.debug("Pizzas encontradas: {}", pizzas);  // Log de debug (muestra el contenido de pizzas)
+        logger.debug("Pizzas encontradas: {}", pizzas);
         return pizzas;
     }
 

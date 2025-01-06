@@ -1,0 +1,2 @@
+{"attributes":{"fieldAttrs":"{}","fields":"[]","runtimeFieldMap":"{}","timeFieldName":"@timestamp","title":"logstash-*","typeMeta":"{}"},"coreMigrationVersion":"7.17.8","id":"0ece8320-bc1a-11ed-8284-cb55ba82334a","migrationVersion":{"index-pattern":"7.11.0"},"references":[],"type":"index-pattern","updated_at":"2023-03-06T14:40:21.729Z","version":"WzMwNTYsMl0="}
+{"excludedObjects":[],"excludedObjectsCount":0,"exportedCount":1,"missingRefCount":0,"missingReferences":[]}

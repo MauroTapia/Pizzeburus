@@ -41,7 +41,6 @@ spring:
         exposure:
           include: health, info, prometheus, metrics
 
-
 resilience4j.circuitbreaker:
   instances:
     pizza-read:
@@ -51,6 +50,7 @@ resilience4j.circuitbreaker:
       waitDurationInOpenState: 30000ms
       permittedNumberOfCallsInHalfOpenState: 3
       minimumNumberOfCalls: 5
+
 logging:
   level:
     root: INFO

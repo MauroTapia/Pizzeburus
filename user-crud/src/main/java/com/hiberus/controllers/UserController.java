@@ -1,6 +1,7 @@
 package com.hiberus.controllers;
 
 
+import com.hiberus.models.Pizza;
 import com.hiberus.models.User;
 import com.hiberus.models.dto.CreateUserDto;
 import com.hiberus.services.UserServices;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -26,15 +28,32 @@ public class UserController {
         this.userServices = userServices;
     }
 
+
+//    @GetMapping
+//    public List<User> getUserLog(Long id) {
+//        log.info("Intentando obtener user con id: "+id);
+//        return List.of(new User(128L, "Mauro", List.of(1L)));
+//    }
+
+
     @Operation(summary = "Obtener todos los usuarios")
     @ApiResponse(responseCode = "200", description = "Lista de usuarios")
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userServices.getUsers();
-        if (users.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }else {
-            return new ResponseEntity<>(users, HttpStatus.OK);
+        log.info("Iniciando la operación para obtener todos los usuarios");
+
+        try {
+            List<User> users = userServices.getUsers();
+            if (users.isEmpty()) {
+                log.warn("No se encontraron usuarios en el sistema");
+                return ResponseEntity.notFound().build();
+            } else {
+                log.info("Se obtuvieron {} usuarios del sistema", users.size());
+                return new ResponseEntity<>(users, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            log.error("Ocurrió un error al intentar obtener los usuarios", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -45,6 +64,9 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         User user = userServices.getUserById(id);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         return ResponseEntity.ok(user);
     }
 
@@ -83,13 +105,24 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Pizza agregada como favorita"),
             @ApiResponse(responseCode = "404", description = "Usuario o pizza no encontrados"),
             @ApiResponse(responseCode = "400", description = "La pizza ya está en favoritos"),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+            @ApiResponse(responseCode = "503", description = "Servicio no disponible")
     })
     @PostMapping("/{userId}/favorites/{pizzaId}")
-    public ResponseEntity<String> addFavoritePizza(@PathVariable Long userId, @PathVariable Long pizzaId) {
-        userServices.addFavoritePizza(userId, pizzaId);
-        return ResponseEntity.ok("Pizza marcada como favorita");
+    public ResponseEntity<Pizza> addFavoritePizza(@PathVariable Long userId, @PathVariable Long pizzaId) {
+        try {
+            Pizza pizza = userServices.addFavoritePizza(userId, pizzaId);
+            return ResponseEntity.ok(pizza);
+        } catch (ResponseStatusException e) {
+            if (e.getStatus() == HttpStatus.SERVICE_UNAVAILABLE) {
+                // Cuando la pizza no está disponible, respondemos con 503
+                return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
+            }
+            // En otros casos (como BAD_REQUEST), respondemos con el código adecuado
+            return new ResponseEntity<>(e.getStatus());
+        }
     }
+
+
 
     @Operation(summary = "Eliminar pizza de favoritos del usuario", description = "Elimina una pizza de los favoritos del usuario especificado.")
     @ApiResponses({

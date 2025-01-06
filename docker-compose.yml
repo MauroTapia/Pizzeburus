@@ -101,6 +101,8 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
+    volumes:
+      - ./logs:/app/logs
     networks:
       - dmh-network
     ports:
@@ -240,6 +242,62 @@ services:
       - dmh-network
 
 
+  filebeat:
+    image: elastic/filebeat:7.17.8
+    container_name: filebeat
+    volumes:
+      - ./config/beats/filebeat.config.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./app/logs:/var/log/app_logs
+    environment:
+      - LOGSTASH_HOST=logstash:5044
+    networks:
+      - dmh-network
+    depends_on:
+      - logstash
+
+  logstash:
+    image: logstash:7.17.8
+    container_name: logstash
+    ports:
+      - 5044:5044  # Puerto Beats para Filebeat
+      - 9600:9600  # Puerto de monitoreo
+    environment:
+      - ELASTICSEARCH_HOST=elasticsearch:9200
+    volumes:
+      - ./config/logstash/app-logs.conf:/usr/share/logstash/pipeline/app-logs.conf:ro
+      - ./config/logstash/templates:/usr/share/logstash/templates:ro
+    networks:
+      - dmh-network
+    depends_on:
+      - elasticsearch
+
+  elasticsearch:
+    image: elasticsearch:7.17.8
+    container_name: elasticsearch
+    ports:
+      - 9200:9200
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+    networks:
+      - dmh-network
+
+  kibana:
+    image: kibana:7.17.8
+    container_name: kibana
+    ports:
+      - 5601:5601
+    environment:
+      - ELASTICSEARCH_HOST=elasticsearch
+    networks:
+      - dmh-network
+    depends_on:
+      - elasticsearch
+
 volumes:
+  elasticsearch:
+    driver: local
   postgres-data: {}
   prom_data: {}

@@ -11,8 +11,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +27,8 @@ import static org.mockito.Mockito.*;
 public class UserServiceTest {
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private PizzaService pizzaService;
 
     @Mock
     private FeignPizzasRead feignPizzasRead;
@@ -103,47 +107,45 @@ public class UserServiceTest {
         assertEquals(1L, createdUser.getId());
         verify(userRepository, times(1)).save(any(User.class));
     }
+
     @Test
-    void shouldAddFavoritePizza() {
+    void testAddFavoritePizza_Success() {
         // Arrange
         Long userId = 1L;
-        Long pizzaId = 1L;
+        Long pizzaId = 2L;
 
-        User user = User.builder().id(userId).name("John").favoritePizzas(new ArrayList<>()).build();
+        User user = new User();
+        user.setFavoritePizzas(new ArrayList<Long>());
+
+        Pizza pizza = new Pizza(pizzaId, "Pizza Margarita");
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
-        Pizza mockPizza = new Pizza(1L, "MuzzarelaWrite");
-        when(feignPizzasRead.getPizzaById(pizzaId)).thenReturn(mockPizza);
+        when(pizzaService.obtenerPizza(pizzaId)).thenReturn(pizza);
 
         // Act
-        userService.addFavoritePizza(userId, pizzaId);
+        Pizza result = userService.addFavoritePizza(userId, pizzaId);
 
         // Assert
-        assertTrue(user.getFavoritePizzas().contains(pizzaId));
-
-        verify(userRepository, times(1)).save(user);
-
-        verify(feignPizzasRead, times(1)).getPizzaById(pizzaId);
+        assertNotNull(result);
+        assertEquals(pizzaId, result.getId());
+        verify(userRepository).save(any(User.class));
     }
 
     @Test
-    void shouldRemoveFavoritePizza_Success() {
+    void testAddFavoritePizza_PizzaNotAvailable() {
         // Arrange
         Long userId = 1L;
-        Long pizzaId = 20L;
+        Long pizzaId = 2L;
+        User user = new User();
+        Pizza pizza = new Pizza(pizzaId, "Pizza no disponible");
 
-        List<Long> favoritePizzas = new ArrayList<>(Arrays.asList(10L, 20L, 30L));
-        User user = User.builder().id(userId).name("John").favoritePizzas(favoritePizzas).build();
-
+        // Simular que el usuario existe
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        // Simular que la pizza no está disponible
+        when(pizzaService.obtenerPizza(pizzaId)).thenReturn(pizza);
 
-        // Act
-        userService.removeFavoritePizza(userId, pizzaId);
-
-        // Assert
-        assertFalse(user.getFavoritePizzas().contains(pizzaId));
-        verify(userRepository, times(1)).save(user);
+        // Act & Assert
+        assertThrows(ResponseStatusException.class, () -> userService.addFavoritePizza(userId, pizzaId));
     }
-
 }

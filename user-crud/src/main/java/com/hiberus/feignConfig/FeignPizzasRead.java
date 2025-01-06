@@ -7,12 +7,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
+
 @FeignClient(name = "pizzas-read", url = "http://pizzas-read:8081/pizzas/read")
 public interface  FeignPizzasRead {
 
-    @GetMapping()
-    List<Pizza> getPizzas();
     @GetMapping("/{id}")
     Pizza getPizzaById(@PathVariable("id") Long id);
-
 }

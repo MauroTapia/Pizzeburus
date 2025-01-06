@@ -1,0 +1,9 @@
+filebeat.inputs:
+  - type: filestream
+    id: app-logs
+    enabled: true
+    paths:
+      - /var/log/app_logs/*.log
+
+output.logstash:
+  hosts: ['${LOGSTASH_HOST:localhost:5044}']
