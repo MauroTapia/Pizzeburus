@@ -3,6 +3,8 @@ package com.hiberus.controllers;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import com.hiberus.models.Pizza;
 import com.hiberus.models.User;
 import com.hiberus.models.dto.CreateUserDto;
 import com.hiberus.services.UserServices;
@@ -11,9 +13,11 @@ import org.mockito.Mock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -177,37 +181,46 @@ public class UserControllerTest {
         Long userId = 1L;
         Long pizzaId = 1L;
 
-        // Simulamos que el usuario existe
-        User mockUser = User.builder().id(userId).name("John").favoritePizzas(new ArrayList<>()).build();
+        User mockUser = User.builder()
+                .id(userId)
+                .name("John")
+                .favoritePizzas(new ArrayList<>())
+                .build();
+
+        Pizza mockPizza = Pizza.builder()
+                .id(pizzaId)
+                .name("Margherita")
+                .build();
+
         when(userServices.getUserById(userId)).thenReturn(mockUser);
+        when(userServices.addFavoritePizza(userId, pizzaId)).thenReturn(mockPizza);
 
-        // Simulamos que la pizza se agrega correctamente
-        doNothing().when(userServices).addFavoritePizza(userId, pizzaId);
-
-        mockMvc.perform(post("/api/users/{userId}/favorites/{pizzaId}", userId, pizzaId))
+        mockMvc.perform(post("/api/users/{userId}/favorites/{pizzaId}", userId, pizzaId)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Pizza marcada como favorita"));
+                .andExpect(jsonPath("$.id").value(pizzaId))
+                .andExpect(jsonPath("$.name").value("Margherita"));
 
-        // Verificamos que el servicio fue llamado para agregar la pizza a favoritos
         verify(userServices, times(1)).addFavoritePizza(userId, pizzaId);
     }
 
-//    @Test
-//    void testAddFavoritePizza_UserNotFound() throws Exception {
-//        Long userId = 1L;
-//        Long pizzaId = 1L;
-//
-//        // Simulamos que el usuario no existe
-//        when(userServices.getUserById(userId)).thenReturn(null);
-//
-//        mockMvc.perform(post("/api/users/{userId}/favorites/{pizzaId}", userId, pizzaId))
-//                .andExpect(status().isNotFound())
-//                .andExpect(content().string("Usuario o pizza no encontrados"));
-//
-//        // Verificamos que el servicio fue llamado para obtener al usuario
-//        verify(userServices, times(1)).getUserById(userId);
-//    }
 
+    @Test
+    void testAddFavoritePizza_UserNotFound() throws Exception {
+        Long userId = 1L;
+        Long pizzaId = 1L;
+
+        // Simulamos que el servicio lanza una excepción cuando el usuario no existe
+        when(userServices.addFavoritePizza(userId, pizzaId))
+                .thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+
+        mockMvc.perform(post("/api/users/{userId}/favorites/{pizzaId}", userId, pizzaId))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Usuario no encontrado"));
+
+        // Verificamos que el servicio fue llamado
+        verify(userServices, times(1)).addFavoritePizza(userId, pizzaId);
+    }
     @Test
     void testRemoveFavoritePizza_Success() throws Exception {
         Long userId = 1L;

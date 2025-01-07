@@ -50,12 +50,14 @@ public class PizzaController {
             @ApiResponse(responseCode = "404", description = "Pizza not found with the given ID")
     })
     @GetMapping("{id}")
-    public ResponseEntity<Pizza> getPizzaById(@PathVariable Long id){
+    public ResponseEntity<?> getPizzaById(@PathVariable Long id) {
         Pizza pizza = pizzaService.getPizzaById(id);
-        return new ResponseEntity<>(pizza, HttpStatus.OK);
 
+        if (pizza == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pizza not found with the given ID");
+        }
+
+        return ResponseEntity.ok(pizza);
     }
-
-
-
+    
 }

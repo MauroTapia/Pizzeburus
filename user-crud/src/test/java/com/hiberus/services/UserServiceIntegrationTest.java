@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,9 @@ public class UserServiceIntegrationTest {
 
     @Autowired
     private UserServiceImpl userService;
+
+    @MockBean
+    private PizzaService pizzaService;
 
     @Autowired
     private UserRepository userRepository;
@@ -124,6 +128,10 @@ public class UserServiceIntegrationTest {
                 .build();
 
         User savedUser = userRepository.save(user);
+
+        // Mock del servicio de pizzas
+        Pizza pizza = Pizza.builder().id(pizzaId).name("Margherita").build();
+        when(pizzaService.obtenerPizza(pizzaId)).thenReturn(pizza);
 
         // Act
         userService.addFavoritePizza(savedUser.getId(), pizzaId);

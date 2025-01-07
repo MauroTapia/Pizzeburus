@@ -108,17 +108,13 @@ public class UserController {
             @ApiResponse(responseCode = "503", description = "Servicio no disponible")
     })
     @PostMapping("/{userId}/favorites/{pizzaId}")
-    public ResponseEntity<Pizza> addFavoritePizza(@PathVariable Long userId, @PathVariable Long pizzaId) {
+    public ResponseEntity<?> addFavoritePizza(@PathVariable Long userId, @PathVariable Long pizzaId) {
         try {
             Pizza pizza = userServices.addFavoritePizza(userId, pizzaId);
             return ResponseEntity.ok(pizza);
         } catch (ResponseStatusException e) {
-            if (e.getStatus() == HttpStatus.SERVICE_UNAVAILABLE) {
-                // Cuando la pizza no está disponible, respondemos con 503
-                return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
-            }
-            // En otros casos (como BAD_REQUEST), respondemos con el código adecuado
-            return new ResponseEntity<>(e.getStatus());
+            // Responde con el código de estado adecuado y el mensaje de error
+            return ResponseEntity.status(e.getStatus()).body(e.getReason());
         }
     }
 

@@ -42,10 +42,11 @@
    ```bash
    docker ps
    ```
-4. Accede a los servicios principales desde tu navegador o herramientas como Postman:
-    - **API Gateway**: `http://localhost:<PUERTO_GATEWAY>`
-    - **Swagger** (documentación de APIs): `http://localhost:<PUERTO_SWAGGER>/swagger-ui.html`
-
+4. Accede a los servicios principales desde tu swagger o herramientas como Postman:
+    - **PIZZAS-READ**: http://localhost:8081/swagger-ui/index.html
+    - **PIZZAS-WRITE**: http://localhost:8082/swagger-ui/index.html
+    - **USER-CRUD**: http://localhost:8083/swagger-ui/index.html
+    -
 ### **Apagar el entorno**
 Para detener todos los servicios, ejecuta:
 ```bash
