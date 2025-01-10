@@ -46,7 +46,7 @@
     - **PIZZAS-READ**: http://localhost:8081/swagger-ui/index.html
     - **PIZZAS-WRITE**: http://localhost:8082/swagger-ui/index.html
     - **USER-CRUD**: http://localhost:8083/swagger-ui/index.html
-    -
+
 ### **Apagar el entorno**
 Para detener todos los servicios, ejecuta:
 ```bash
@@ -84,19 +84,15 @@ Para detener todos los servicios, ejecuta:
 
 ### **Entidades principales**
 1. **Usuario**:
-    - ID (UUID)
+    - ID
     - Nombre
-    - Email
-    - Contraseña
     - Lista de favoritos (relación con pizzas)
 2. **Pizza**:
-    - ID (UUID)
+    - ID
     - Nombre
-    - Descripción
-    - Precio
 3. **Favoritos**:
-    - ID de Usuario (UUID)
-    - ID de Pizza (UUID)
+    - ID de Usuario
+    - ID de Pizza
 
 ---
 
